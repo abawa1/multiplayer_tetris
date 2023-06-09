@@ -1,11 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-
+import GamePage from './GamePage.js';
 function App() {
   return (
     <div className="App">
-      <h1>Tetris</h1>
-      
+      <GamePage></GamePage>
     </div>
   );
 }
