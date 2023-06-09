@@ -1,8 +1,11 @@
 import './GamePage.css';
 function Board(){
     return (
-        <div classname="board"></div>
-    )
+        <div class="board-container">
+            <canvas className="canvas" id="canvas">
+            </canvas>
+        </div>
+    );
 }
 function TextDisplay({metric,value}){
     return (
@@ -26,7 +29,7 @@ function Sidebar(){
                 value={0}
             />
         </div>
-    )
+    );
 }
 function Page(){
     return (
