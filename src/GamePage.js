@@ -1,9 +1,17 @@
 import './GamePage.css';
+function Cell(){
+    return (
+        <div className="cell"></div>
+    );
+}
 function Board(){
+    const cells=[];
+    for(let i=0;i<200;i++){
+        cells.push(<Cell key={i}></Cell>);
+    }
     return (
         <div class="board-container">
-            <canvas className="canvas" id="canvas">
-            </canvas>
+            {cells}
         </div>
     );
 }
@@ -28,6 +36,7 @@ function Sidebar(){
                 metric="Level"
                 value={0}
             />
+            <button className="play-button">Play</button>
         </div>
     );
 }
