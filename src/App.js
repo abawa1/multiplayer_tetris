@@ -1,10 +1,17 @@
 import logo from './logo.svg';
-import './App.css';
 
 function App() {
   return (
     <div className="App">
       <h1>Tetris</h1>
+      <div className="Board">
+        <span> 
+          hi
+        </span>
+        <span>
+          hi2
+        </span>
+      </div>
       
     </div>
   );
