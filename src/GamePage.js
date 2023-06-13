@@ -1,13 +1,13 @@
 import './GamePage.css';
-function Cell(){
-    return (
-        <div className="cell"></div>
-    );
-}
+import Cell from './Cell.js'
+import NextBlock from './NextBlock.js'
+import ScoreBoard from './ScoreBoard.js'
 function Board(){
     const cells=[];
-    for(let i=0;i<200;i++){
-        cells.push(<Cell key={i}></Cell>);
+    for(let i=0;i<20;i++){
+        for(let j=0;j<10;j++){
+            cells.push(<Cell key={`${i}${j}`} color='0'></Cell>);
+        }
     }
     return (
         <div class="board-container">
@@ -15,35 +15,13 @@ function Board(){
         </div>
     );
 }
-function TextDisplay({metric,value}){
-    return (
-        <h3>{metric}: {value}</h3>
-    );
-}
-function Sidebar(){
-    return(
-        <div className="sidebar">
-            <h1 className="title">Tetris</h1>
-            <TextDisplay
-                metric="Score"
-                value={0}
-            />
-            <TextDisplay
-                metric="Lines"
-                value={0}
-            />
-            <TextDisplay
-                metric="Level"
-                value={0}
-            />
-            <button className="play-button">Play</button>
-        </div>
-    );
-}
 function Page(){
     return (
         <div className="container">
-            <Sidebar></Sidebar>
+            <div className="side-area">
+                <NextBlock></NextBlock>
+                <ScoreBoard></ScoreBoard>
+            </div>
             <Board></Board>
         </div>
     );
