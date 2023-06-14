@@ -73,12 +73,30 @@ background-color: var(--color-2);
             background-color: var(--color-0);
             box-shadow: 8px 8px black;
             color:black;
+
         }
+        .meta{
+            width:150px;
+            height:50px;
+            font-size: 25px;
+            background-color: var(--color-0);
+            color:black;
+            border-radius:25px;
+            border:1px solid var(--color-0);
+            box-shadow: 5px 5px black;
+        }
+        .meta:hover{
+            background-color: black;
+            color:white;
+            border-radius:25px;
+            border:1px solid black;
+            box-shadow: 5px 5px black;
+        }
+        
     }
 
         
     .board-container{
-        
         display: inline-grid;
         grid-template-columns: repeat(10, 2fr);
         grid-template-rows: repeat(20, 2fr);
@@ -87,6 +105,7 @@ background-color: var(--color-2);
         height:600px;
         box-shadow:5px 5px black;
     }
+    
 }
 .cell{
     border: solid;
