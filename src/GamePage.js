@@ -4,6 +4,9 @@ import NextBlock from './NextBlock.js'
 import ScoreBoard from './ScoreBoard.js'
 import Popup from './Popup.js'
 import {useState} from 'react';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import reducers from './reducers'
 function Board(){
     const cells=[];
     for(let i=0;i<20;i++){
@@ -28,24 +31,23 @@ function Button(props){
 }
 function Page(){
     const [resume,shouldShowResume]=useState(false);
+    const store=createStore(reducers);
     function setResume(){
         shouldShowResume(!resume);
     }
-    function restartGame(){
-        shouldShowResume(false);
-    }
     return (
-        <div className="container">
-            <div className="side-area">
-                <NextBlock></NextBlock>
-                <ScoreBoard></ScoreBoard>
-                <Button className="meta" id="pause" onClick={setResume} shouldResume={resume} text="Pause">Pause</Button>
-                <Button className="meta" id="resume" onClick={setResume} shouldResume={resume} text="Resume">Resume</Button>
-                <Button className="meta" id="restart" onClick={restartGame} shouldResume={resume} text="Restart">Restart</Button>
+        <Provider store={store}>
+            <div className="container">
+                <div className="side-area">
+                    <NextBlock></NextBlock>
+                    <ScoreBoard></ScoreBoard>
+                    <Button className="meta" id="pause" onClick={setResume} shouldResume={resume} text="Pause"></Button>
+                    <Button className="meta" id="resume" onClick={setResume} shouldResume={resume} text="Resume"></Button>
+                    <Button className="meta" id="restart" onClick={()=>shouldShowResume(false)} shouldResume={resume} text="Restart"></Button>
+                </div>
+                <Board></Board>
             </div>
-            
-            <Board></Board>
-        </div>
+        </Provider>
     );
 }
 export default Page;
