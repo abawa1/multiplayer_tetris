@@ -16,6 +16,5 @@ export default function Popup(props){
         <div className={`popup ${isHidden}`}>
             <h1>{message}</h1>
         </div>
-        
     );
 }

@@ -143,3 +143,22 @@ background-color: var(--color-2);
         color:var(--color-5);
     }
 }
+.popup{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:200px;
+    height:200px;
+    transform:translate(-50%,-50%);
+}
+.popup h1{
+    position:absolute;
+    top:50%;
+    left:0;
+    right:0;
+    transform:translateY(-50%);
+    text-align: center;
+}
+.popup.hidden {
+    display: none;
+  }

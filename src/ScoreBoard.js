@@ -1,10 +1,35 @@
 import {useSelector,useDispatch} from 'react-redux'
-import {useState} from 'react';
 import {pause,resume,restart} from './actions'
+import {moveDown,moveLeft,moveRight,rotate} from './actions'
+import {useEffect} from 'react'
 export default function ScoreBoard(){
     const dispatch=useDispatch();
     const game=useSelector((state)=>state.game)
     const {isRunning,score,lines,level,gameOver}=game;
+    
+    useEffect(()=>{
+        const handleKeyDown=(e)=>{
+            if(isRunning&&!gameOver){
+                switch(e.key){
+                    case 'ArrowLeft':
+                        dispatch(moveLeft());
+                        break;
+                    case 'ArrowUp':
+                        dispatch(rotate());
+                        break;
+                    case 'ArrowRight':
+                        dispatch(moveRight());
+                        break;
+                    case 'ArrowDown':
+                        dispatch(moveDown());
+                }
+            }
+        };
+        document.addEventListener('keydown',handleKeyDown)
+        return ()=>{
+            document.removeEventListener('keydown',handleKeyDown)
+        };
+    },[!isRunning||gameOver]);
     return(
         <>
             <div className="scoreboard">
@@ -21,7 +46,7 @@ export default function ScoreBoard(){
                     value={level}
                 />
             </div>
-            <Button onClick={(e)=>{
+            <Button onClick={()=>{
                     if(gameOver){
                         return;
                     }
@@ -33,7 +58,7 @@ export default function ScoreBoard(){
                     }
                 }
             } text={isRunning?'Pause':'Play'}></Button>
-            <Button onClick={(e)=>{
+            <Button onClick={()=>{
                 dispatch(restart());
             }} text="Restart"></Button>
         </>
@@ -45,11 +70,5 @@ function TextDisplay({metric,value}){
     );
 }
 function Button(props){
-    if(props.id==="resume"&&!props.shouldResume){
-        return null;
-    }
-    if(props.id==="pause"&&props.shouldResume){
-        return null;
-    }
     return <button className="meta" id={props.id} onClick={props.onClick}>{props.text}</button>
 }
