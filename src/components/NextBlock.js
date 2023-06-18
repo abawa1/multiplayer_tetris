@@ -1,6 +1,6 @@
 import Cell from './Cell.js'
 import {useSelector} from 'react-redux'
-import {pieces} from './utils'
+import {pieces} from '../utils'
 
 export default function NextBlock(props){
     const nextPiece=useSelector((state)=>state.game.nextPiece);

@@ -1,15 +1,15 @@
-import './GamePage.css';
-import Cell from './Cell.js'
-import NextBlock from './NextBlock.js'
-import ScoreBoard from './ScoreBoard.js'
-import Popup from './Popup.js';
+import '../GamePage.css';
+import Cell from '../components/Cell.js'
+import NextBlock from '../components/NextBlock.js'
+import ScoreBoard from '../components/ScoreBoard.js'
+import Popup from '../components/Popup.js';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
-import reducers from './reducers'
+import reducers from '../reducers'
 import {useSelector, useDispatch} from 'react-redux'
-import {pieces} from './utils'
+import {pieces} from '../utils'
 import {useEffect,useRef} from 'react'
-import {moveDown} from './actions'
+import {moveDown} from '../actions'
 function Board(){
     const game=useSelector((state)=>state.game);
     const {grid,piece,rotation,x,y,isRunning,score,lines,level,speed}=game;
@@ -57,7 +57,7 @@ function Board(){
         </div>
     );
 }
-function Page(){
+function GamePage(){
     const store=createStore(reducers);
     return (
         <Provider store={store}>
@@ -72,4 +72,4 @@ function Page(){
         </Provider>
     );
 }
-export default Page;
+export default GamePage;

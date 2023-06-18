@@ -1,10 +1,15 @@
-import './App.css';
-import GamePage from './GamePage.js';
+import GamePage from './pages/GamePage.js';
+import StartPage from './pages/StartPage.js';
+import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 function App() {
   return (
-    <div className="App">
-      <GamePage></GamePage>
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path='/' element={<StartPage></StartPage>}/>
+        <Route path='/Play' element={<GamePage></GamePage>}/>
+      </Routes>
+        
+    </Router>
   );
 }
 
