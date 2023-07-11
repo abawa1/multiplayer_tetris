@@ -12,7 +12,7 @@ import {useEffect,useRef} from 'react'
 import {moveDown} from '../actions'
 function Board(){
     const game=useSelector((state)=>state.game);
-    const {grid,piece,rotation,x,y,isRunning,score,lines,level,speed}=game;
+    const {grid,piece,rotation,x,y,isRunning,speed}=game;
     const block=pieces[piece][rotation]
     const blockColor=piece;
     const cells=grid.map((rowArray,row)=>{
@@ -52,7 +52,7 @@ function Board(){
         return ()=>cancelAnimationFrame(requestRef.current)
     },[isRunning]);
     return (
-        <div class="board-container">
+        <div className="board-container">
             {cells}
         </div>
     );

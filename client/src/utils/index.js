@@ -188,7 +188,7 @@ export const addBlockToGrid=(piece,grid,x,y,rotation)=>{
     const newGrid=[...grid];
     for(let r=0;r<block.length;r++){
         for(let c=0;c<block.length;c++){
-            if(block[r][c]!=0){
+            if(block[r][c]!==0){
                 const newY=r+y;
                 if(newY<0){
                     blockOffGrid=true;

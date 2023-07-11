@@ -8,7 +8,9 @@ export default function StartMenu(){
                 <Link className="buttons" to='/Play'>
                     <button className="play-button">Singleplayer</button>
                 </Link>
-                <button className="play-button">Multiplayer</button>
+                <Link className="buttons" to='/Setup'>
+                    <button className="play-button">Multiplayer</button>
+                </Link>
             </div>
         </div>
     );
