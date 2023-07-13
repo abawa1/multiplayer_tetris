@@ -2,33 +2,8 @@ import {useSelector,useDispatch} from 'react-redux'
 import {pause,resume,restart,moveDown,moveLeft,moveRight,rotate} from '../actions'
 import {useEffect} from 'react'
 export default function ScoreBoard(){
-    const dispatch=useDispatch();
     const game=useSelector((state)=>state.game)
-    const {isRunning,score,lines,level,gameOver}=game;
-    
-    useEffect(()=>{
-        const handleKeyDown=(e)=>{
-            if(isRunning&&!gameOver){
-                switch(e.key){
-                    case 'ArrowLeft':
-                        dispatch(moveLeft());
-                        break;
-                    case 'ArrowUp':
-                        dispatch(rotate());
-                        break;
-                    case 'ArrowRight':
-                        dispatch(moveRight());
-                        break;
-                    case 'ArrowDown':
-                        dispatch(moveDown());
-                }
-            }
-        };
-        document.addEventListener('keydown',handleKeyDown)
-        return ()=>{
-            document.removeEventListener('keydown',handleKeyDown)
-        };
-    },[!isRunning||gameOver]);
+    const {score,lines,level}=game;
     return(
         <>
             <div className="scoreboard">
@@ -45,6 +20,15 @@ export default function ScoreBoard(){
                     value={level}
                 />
             </div>
+        </>
+    );
+}
+export function Buttons(){
+    const dispatch=useDispatch();
+    const game=useSelector((state)=>state.game)
+    const {isRunning,gameOver}=game;
+    return(
+        <>
             <Button onClick={()=>{
                     if(gameOver){
                         return;

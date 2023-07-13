@@ -36,7 +36,7 @@ function JoinRoom({setRoom,setPlayers}){
                   required
               />
               <br />
-              <Link to={roomInput ? "/Play" : ""}>
+              <Link to={roomInput ? "/MultiPlay" : ""}>
                     <input
                         type="button"
                         value="Submit"
@@ -52,7 +52,7 @@ function JoinRoom({setRoom,setPlayers}){
 function GameRoom({setRoom}){
     return (
         <div className="gameroom-container inactive">
-            <Link to= "/Play">
+            <Link to= "/MultiPlay">
                 <button className="start-game" onClick={
                     ()=>{
                         socket.emit("createRoom",(r)=>{

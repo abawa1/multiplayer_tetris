@@ -10,7 +10,9 @@ import {useSelector, useDispatch} from 'react-redux'
 import {pieces} from '../utils'
 import {useEffect,useRef} from 'react'
 import {moveDown} from '../actions'
-function Board(){
+import Controls from '../components/Controls'
+import {Buttons} from '../components/ScoreBoard'
+export function Board(){
     const game=useSelector((state)=>state.game);
     const {grid,piece,rotation,x,y,isRunning,speed}=game;
     const block=pieces[piece][rotation]
@@ -51,6 +53,7 @@ function Board(){
         requestRef.current=requestAnimationFrame(update);
         return ()=>cancelAnimationFrame(requestRef.current)
     },[isRunning]);
+    
     return (
         <div className="board-container">
             {cells}
@@ -65,6 +68,8 @@ function GamePage(){
                 <div className="side-area">
                     <NextBlock></NextBlock>
                     <ScoreBoard></ScoreBoard>
+                    <Buttons></Buttons>
+                    <Controls></Controls>
                 </div>
                 <Board></Board>
             </div>
