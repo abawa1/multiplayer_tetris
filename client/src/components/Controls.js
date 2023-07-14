@@ -20,6 +20,9 @@ export default function Controls(){
                         break;
                     case 'ArrowDown':
                         dispatch(moveDown());
+                        break;
+                    default:
+                        break;
                 }
             }
         };

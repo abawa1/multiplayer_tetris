@@ -1,6 +1,5 @@
 import {useSelector,useDispatch} from 'react-redux'
-import {pause,resume,restart,moveDown,moveLeft,moveRight,rotate} from '../actions'
-import {useEffect} from 'react'
+import {pause,resume,restart} from '../actions'
 export default function ScoreBoard(){
     const game=useSelector((state)=>state.game)
     const {score,lines,level}=game;

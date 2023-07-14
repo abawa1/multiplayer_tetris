@@ -115,23 +115,21 @@ function Dialogue(){
     );
 }
 export default function MultiSetupPage(){
-    const [room, setRoom] = useState("");
-    const [orientation, setOrientation] = useState("");
-    const [players, setPlayers] = useState([]);
-
-    const cleanup = useCallback(() => {
-        setRoom("");
-        setOrientation("");
-        setPlayers("");
-      }, []);
-    
-    useEffect(() => {
-        socket.on("opponentJoined", (roomData) => {
-            console.log("roomData", roomData)
-            setPlayers(roomData.players);
-        });
+  const [room, setRoom] = useState("");
+  const [orientation, setOrientation] = useState("");
+  const [players, setPlayers] = useState([]);
+  const cleanup = useCallback(() => {
+      setRoom("");
+      setOrientation("");
+      setPlayers("");
     }, []);
-
+  
+  useEffect(() => {
+      socket.on("opponentJoined", (roomData) => {
+          console.log("roomData", roomData)
+          setPlayers(roomData.players);
+      });
+  }, []);
     return (
         <div className="container">
             <Dialogue></Dialogue>

@@ -66,6 +66,7 @@ body{
         align-items: center;
         justify-content: space-around;
         height:75vh;
+        z-index:2;
         .scoreboard{
             height:15vh;
             display:flex;
@@ -158,9 +159,11 @@ body{
     position:absolute;
     left:50%;
     top:50%;
-    width:200px;
-    height:200px;
+    width:100vw;
+    height:100vh;
     transform:translate(-50%,-50%);
+    background-color: rgb(240,248,255,0.5);
+    
 }
 .popup h1{
     position:absolute;
@@ -266,7 +269,6 @@ body{
     align-items: center;
     justify-content: space-between;
     height:55vh;
-    margin-bottom:15vh;
     .scoreboard{
         height:15vh;
         display:flex;
@@ -282,13 +284,12 @@ body{
     }
 }
 .buttons-container-multi{
-    position:absolute;
     display:flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    top:72.5vh;
-    height:15vh;
+    justify-content: space-evenly;
+    height:30vh;
+    z-index:2;
     .meta{
         width:10vw;
         height:6vh;
