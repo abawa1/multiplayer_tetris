@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import socket from '../socket'
 import {Link} from 'react-router-dom'
 
-function JoinRoom({setRoom,setPlayers}){
+function JoinRoom(){
     const [roomInput, setRoomInput] = useState('');
     const [roomError, setRoomError] = useState('');
     const handleIDChange = (e) => {
@@ -14,13 +14,11 @@ function JoinRoom({setRoom,setPlayers}){
       if (!roomInput) {
         return;
       }
-      socket.emit("joinRoom",{roomId:roomInput},(r)=>{
+      socket.emit("joinRoom",{roomId:roomInput},(r,gameState,gameState2)=>{
         if(r.error){
-            return setRoomError(r.messgae);
+            return setRoomError(r.message);
         }
-        console.log("response:",r);
-        setRoom(r?.roomId);
-        setPlayers(r?.players);
+        //console.log(gameState2)
       })
     }
   return (
@@ -49,7 +47,7 @@ function JoinRoom({setRoom,setPlayers}){
   );
 }
 
-function GameRoom({setRoom}){
+function GameRoom(){
     return (
         <div className="gameroom-container inactive">
             <Link to= "/MultiPlay">
@@ -57,7 +55,6 @@ function GameRoom({setRoom}){
                     ()=>{
                         socket.emit("createRoom",(r)=>{
                             console.log(r);
-                            setRoom(r);
                         })
                     }
                 }>Start a Game</button>
@@ -115,26 +112,12 @@ function Dialogue(){
     );
 }
 export default function MultiSetupPage(){
-  const [room, setRoom] = useState("");
-  const [orientation, setOrientation] = useState("");
-  const [players, setPlayers] = useState([]);
-  const cleanup = useCallback(() => {
-      setRoom("");
-      setOrientation("");
-      setPlayers("");
-    }, []);
-  
-  useEffect(() => {
-      socket.on("opponentJoined", (roomData) => {
-          console.log("roomData", roomData)
-          setPlayers(roomData.players);
-      });
-  }, []);
+
     return (
         <div className="container">
             <Dialogue></Dialogue>
-            <GameRoom setRoom={setRoom}></GameRoom>
-            <JoinRoom setRoom={setRoom} setPlayers={setPlayers}></JoinRoom>
+            <GameRoom></GameRoom>
+            <JoinRoom></JoinRoom>
         </div>
     );
 }

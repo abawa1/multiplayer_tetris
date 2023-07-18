@@ -1,11 +1,14 @@
+const index=require('./index')
+const timer=require('./Timer')
 const express=require('express')
 const {Server}=require("socket.io")
 const {v4:uuidV4}=require("uuid");
 const http=require("http");
-
+const gameStates=require('./gameState')
+const { gameReducer } = require('./GameReducer');
+const { pause,resume,restart,gameOver } = require('./actions');
 const app=express();
 const server=http.createServer(app);
-
 const port=process.env.PORT||8080;
 
 const io=new Server(server,{
@@ -68,15 +71,44 @@ io.on('connection',(socket)=>{
             { id: socket.id, username: socket.data?.username },
           ],
         };
-    
+        let gameState1=index.defaultGameState();
+        let gameState2=index.defaultGameState();
+        gameState1.roomId=args.roomId;
+        gameState2.roomId=args.roomId;
+        gameStates.setGameState("player1",gameState1);
+        gameStates.setGameState("player2",gameState2);
         rooms.set(args.roomId, roomUpdate);
-    
-        callback(roomUpdate); // respond to the client with the room details.
-    
+        callback(roomUpdate,gameStates.getGameState("player1"),gameStates.getGameState("player2")); // respond to the client with the room details.
         // emit an 'opponentJoined' event to the room to tell the other player that an opponent has joined
-        socket.to(args.roomId).emit('opponentJoined', roomUpdate);
+        io.in(args.roomId).emit('opponentJoined', roomUpdate,gameStates.getGameState("player1"),gameStates.getGameState("player2"));
+        timer.startTimer(args.roomId,io);
       });
-})
+      socket.on("pauseFromClient",async(args)=>{
+        timer.pauseTimer();
+        gameStates.setGameState("player1",gameReducer(gameStates.getGameState("player1"),pause()));
+        gameStates.setGameState("player2",gameReducer(gameStates.getGameState("player2"),pause()));
+        io.in(args.roomId).emit("pause",gameStates.getGameState("player1"),gameStates.getGameState("player2"))
+      });
+      socket.on("resumeFromClient",async (args)=>{
+        timer.startTimer(args.roomId,io);
+        gameStates.setGameState("player1",gameReducer(gameStates.getGameState("player1"),resume()));
+        gameStates.setGameState("player2",gameReducer(gameStates.getGameState("player2"),resume()));
+        io.in(args.roomId).emit("resume",gameStates.getGameState("player1"),gameStates.getGameState("player2"))
+      });
+      socket.on("restartFromClient",async (args)=>{
+        timer.resetTimer();
+        gameStates.setGameState("player1",gameReducer(gameStates.getGameState("player1"),restart()));
+        gameStates.setGameState("player2",gameReducer(gameStates.getGameState("player2"),restart()));
+        io.in(args.roomId).emit("restart",gameStates.getGameState("player1"),gameStates.getGameState("player2"))
+        timer.startTimer(args.roomId,io);
+      });
+      socket.on("gameOver",async (args)=>{
+        timer.resetTimer();
+        gameStates.setGameState("player1",gameReducer(gameStates.getGameState("player1"),gameOver()));
+        gameStates.setGameState("player2",gameReducer(gameStates.getGameState("player2"),gameOver()));
+        //io.in(args.roomId).emit("gameOver",gameStates.getGameState("player1"),gameStates.getGameState("player2"))
+      })
+});
 
 server.listen(port, () => {
     console.log(`listening on *:${port}`);

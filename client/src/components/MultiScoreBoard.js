@@ -1,7 +1,9 @@
 import {useSelector,useDispatch} from 'react-redux'
 import {pause,resume,restart} from '../actions'
-export default function ScoreBoard(){
-    const game=useSelector((state)=>state.game)
+import {Button,TextDisplay} from './ScoreBoard'
+import socket from '../socket'
+export default function MultiScoreBoard({player}){
+    const game=useSelector((state)=>state[player])
     const {score,lines,level}=game;
     return(
         <>
@@ -22,9 +24,8 @@ export default function ScoreBoard(){
         </>
     );
 }
-export function Buttons(){
-    const dispatch=useDispatch();
-    const game=useSelector((state)=>state.game)
+export function MultiButtons({player}){
+    const game=useSelector((state)=>state[player])
     const {isRunning,gameOver}=game;
     return(
         <>
@@ -33,24 +34,16 @@ export function Buttons(){
                         return;
                     }
                     if(isRunning){
-                        dispatch(pause());
+                        socket.emit("pauseFromClient",{roomId:game.roomId});
                     }
                     else{
-                        dispatch(resume());
+                        socket.emit("resumeFromClient",{roomId:game.roomId});
                     }
                 }
             } text={isRunning?'Pause':'Play'}></Button>
             <Button onClick={()=>{
-                dispatch(restart());
+                socket.emit("restartFromClient",{roomId:game.roomId});
             }} text="Restart"></Button>
         </>
     );
-}
-export function TextDisplay({metric,value}){
-    return (
-        <h3>{metric}: {value}</h3>
-    );
-}
-export function Button(props){
-    return <button className="meta" id={props.id} onClick={props.onClick}>{props.text}</button>
 }

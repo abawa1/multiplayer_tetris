@@ -1,7 +1,7 @@
 import {useSelector,useDispatch} from 'react-redux'
 import {moveDown,moveLeft,moveRight,rotate} from '../actions'
 import {useEffect} from 'react'
-export default function Controls(){
+const Controls=()=>{
     const dispatch=useDispatch();
     const game=useSelector((state)=>state.game)
     const {isRunning,gameOver}=game;
@@ -31,5 +31,5 @@ export default function Controls(){
             document.removeEventListener('keydown',handleKeyDown)
         };
     },[!isRunning||gameOver]);
-    return (<></>)
 }
+export default Controls;

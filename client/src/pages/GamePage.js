@@ -3,14 +3,14 @@ import Cell from '../components/Cell.js'
 import NextBlock from '../components/NextBlock.js'
 import ScoreBoard from '../components/ScoreBoard.js'
 import Popup from '../components/Popup.js';
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import reducers from '../reducers'
 import {useSelector} from 'react-redux'
 import {pieces} from '../utils'
 import Controls from '../components/Controls'
 import {Buttons} from '../components/ScoreBoard'
 import Timer from '../components/Timer'
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import reducers from '../reducers/index'
 export function Board(){
     const game=useSelector((state)=>state.game);
     const {grid,piece,rotation,x,y}=game;
@@ -38,17 +38,17 @@ function GamePage(){
     const store=createStore(reducers);
     return (
         <Provider store={store}>
-            <div className="container">
-                <Popup></Popup>
-                <Timer></Timer>
-                <div className="side-area">
-                    <NextBlock></NextBlock>
-                    <ScoreBoard></ScoreBoard>
-                    <Buttons></Buttons>
-                    <Controls></Controls>
-                </div>
-                <Board></Board>
+        <Timer></Timer>
+        <Controls></Controls>
+        <div className="container">
+            <Popup></Popup>
+            <div className="side-area">
+                <NextBlock></NextBlock>
+                <ScoreBoard></ScoreBoard>
+                <Buttons></Buttons>
             </div>
+            <Board></Board>
+        </div>
         </Provider>
     );
 }

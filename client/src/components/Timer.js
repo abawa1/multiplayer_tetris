@@ -1,7 +1,7 @@
 import {useSelector, useDispatch} from 'react-redux'
 import {useEffect,useRef} from 'react'
 import {moveDown} from '../actions'
-export default function Timer(){
+const Timer=()=>{
     const game=useSelector((state)=>state.game);
     const {isRunning,speed}=game;
     const requestRef=useRef();
@@ -28,5 +28,6 @@ export default function Timer(){
         requestRef.current=requestAnimationFrame(update);
         return ()=>cancelAnimationFrame(requestRef.current)
     },[isRunning]);
-    return (<></>);
+    
 }
+export default Timer;

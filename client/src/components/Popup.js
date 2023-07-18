@@ -1,5 +1,5 @@
 import {useSelector} from 'react-redux'
-export default function Popup(props){
+export default function Popup(){
     const isRunning=useSelector((state)=>(state.game.isRunning));
     const gameOver=useSelector((state)=>state.game.gameOver);
     let message='';
