@@ -1,7 +1,8 @@
 import '../GamePage.css';
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import socket from '../socket'
 import {Link} from 'react-router-dom'
+let clientUsername;
 
 function JoinRoom(){
     const [roomInput, setRoomInput] = useState('');
@@ -18,7 +19,6 @@ function JoinRoom(){
         if(r.error){
             return setRoomError(r.message);
         }
-        //console.log(gameState2)
       })
     }
   return (
@@ -47,14 +47,17 @@ function JoinRoom(){
   );
 }
 
-function GameRoom(){
+function GameRoom({setRoomId}){
+    
     return (
+        <>
         <div className="gameroom-container inactive">
             <Link to= "/MultiPlay">
                 <button className="start-game" onClick={
                     ()=>{
                         socket.emit("createRoom",(r)=>{
                             console.log(r);
+                            setRoomId(r)
                         })
                     }
                 }>Start a Game</button>
@@ -68,6 +71,7 @@ function GameRoom(){
                 }
             }>Join a Game</button>
         </div>
+        </>
     );
 }
 function Dialogue(){
@@ -81,6 +85,7 @@ function Dialogue(){
           return;
         }
         socket.emit("username", username);
+        clientUsername=username;
         const dialogueContainer=document.querySelector('.dialogue-container');
         dialogueContainer.classList.add('inactive');
         const gameroomContainer=document.querySelector('.gameroom-container');
@@ -111,12 +116,12 @@ function Dialogue(){
         </div>
     );
 }
-export default function MultiSetupPage(){
-
+export {clientUsername}
+export default function MultiSetupPage({setRoomId}){
     return (
         <div className="container">
             <Dialogue></Dialogue>
-            <GameRoom></GameRoom>
+            <GameRoom setRoomId={setRoomId}></GameRoom>
             <JoinRoom></JoinRoom>
         </div>
     );

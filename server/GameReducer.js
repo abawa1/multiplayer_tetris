@@ -2,7 +2,7 @@ const actions=require('./actions')
 const index=require('./index')
 
 const gameReducer=(state=index.defaultGameState(),action)=>{
-    const {piece, grid, x, y, rotation, nextPiece, score, isRunning,level,lines,roomId } = state
+    const {piece, grid, x, y, rotation, nextPiece, score, isRunning,level,lines,roomId,playerId } = state
     switch(action.type){
         case actions.ROTATE:
             const newRotation=index.nextRotation(piece,rotation);
@@ -38,6 +38,7 @@ const gameReducer=(state=index.defaultGameState(),action)=>{
             newState.roomId=roomId;
             newState.grid=newGrid;
             newState.piece=nextPiece;
+            newState.playerId=playerId;
             newState.nextPiece=index.generateRandomPiece();
             newState.isRunning=isRunning;
             if(!index.canMoveTo(nextPiece,newGrid,0,4,0)){
@@ -62,6 +63,7 @@ const gameReducer=(state=index.defaultGameState(),action)=>{
         case actions.RESTART:
             const newGame=index.defaultGameState();
             newGame.roomId=roomId;
+            newGame.playerId=playerId;
             return newGame;
         default:
             return state;

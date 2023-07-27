@@ -6,7 +6,7 @@ const {v4:uuidV4}=require("uuid");
 const http=require("http");
 const gameStates=require('./gameState')
 const { gameReducer } = require('./GameReducer');
-const { pause,resume,restart,gameOver } = require('./actions');
+const { pause,resume,restart,gameOver,moveLeft,moveDown,moveRight,rotate } = require('./actions');
 const app=express();
 const server=http.createServer(app);
 const port=process.env.PORT||8080;
@@ -16,10 +16,9 @@ const io=new Server(server,{
 });
 
 const rooms=new Map();
-
 io.on('connection',(socket)=>{
     console.log(socket.id,'connected');
-    socket.on('username',(username)=>{
+    socket.on('username',async (username)=>{
         console.log('username:',username);
         socket.data.username=username;
     })
@@ -75,6 +74,8 @@ io.on('connection',(socket)=>{
         let gameState2=index.defaultGameState();
         gameState1.roomId=args.roomId;
         gameState2.roomId=args.roomId;
+        gameState1.playerId=roomUpdate.players[0].username;
+        gameState2.playerId=roomUpdate.players[1].username;
         gameStates.setGameState("player1",gameState1);
         gameStates.setGameState("player2",gameState2);
         rooms.set(args.roomId, roomUpdate);
@@ -83,6 +84,63 @@ io.on('connection',(socket)=>{
         io.in(args.roomId).emit('opponentJoined', roomUpdate,gameStates.getGameState("player1"),gameStates.getGameState("player2"));
         timer.startTimer(args.roomId,io);
       });
+      socket.on('keyPressed', (args) => {
+        // Process incoming messages here
+        switch (args.action) {
+          case 'ALeftFromClient':
+            if(rooms.get(args.roomId).players[1].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player1", gameReducer(gameStates.getGameState("player1"), moveLeft()));
+            break;
+          case 'WRotateFromClient':
+            if(rooms.get(args.roomId).players[1].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player1", gameReducer(gameStates.getGameState("player1"), rotate()));
+            break;
+          case 'SDownFromClient':
+            if(rooms.get(args.roomId).players[1].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player1", gameReducer(gameStates.getGameState("player1"), moveDown()));
+            break;
+          case 'DRightFromClient':
+            if(rooms.get(args.roomId).players[1].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player1", gameReducer(gameStates.getGameState("player1"), moveRight()));
+            break;
+          case 'moveLeftFromClient':
+            if(rooms.get(args.roomId).players[0].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player2", gameReducer(gameStates.getGameState("player2"), moveLeft()));
+            break;
+          case 'rotateFromClient':
+            if(rooms.get(args.roomId).players[0].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player2", gameReducer(gameStates.getGameState("player2"), rotate()));
+            break;
+          case 'moveRightFromClient':
+            if(rooms.get(args.roomId).players[0].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player2", gameReducer(gameStates.getGameState("player2"), moveRight()));
+            break;
+          case 'moveDownFromClient':
+            if(rooms.get(args.roomId).players[0].username===args.playerId){
+              return;
+            }
+            gameStates.setGameState("player2", gameReducer(gameStates.getGameState("player2"), moveDown()));
+            break;
+          default:
+            break;
+        }
+        io.in(args.roomId).emit("gameState", gameStates.getGameState("player1"), gameStates.getGameState("player2"));
+      });
+    
       socket.on("pauseFromClient",async(args)=>{
         timer.pauseTimer();
         gameStates.setGameState("player1",gameReducer(gameStates.getGameState("player1"),pause()));
@@ -106,7 +164,6 @@ io.on('connection',(socket)=>{
         timer.resetTimer();
         gameStates.setGameState("player1",gameReducer(gameStates.getGameState("player1"),gameOver()));
         gameStates.setGameState("player2",gameReducer(gameStates.getGameState("player2"),gameOver()));
-        //io.in(args.roomId).emit("gameOver",gameStates.getGameState("player1"),gameStates.getGameState("player2"))
       })
 });
 

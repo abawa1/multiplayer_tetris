@@ -1,41 +1,52 @@
-
 const { moveDown } = require('./actions');
 const { gameReducer } = require('./GameReducer');
-const { setGameState, getGameState,getGameStates } = require('./gameState');
+const { setGameState, getGameState, getGameStates } = require('./gameState');
 const BLOCK_MOVE_INTERVAL = 1000; // Interval for block movement in milliseconds
 
-let timerInterval;
+let timerTimeout;
 let isRunning = false;
 
 // Function to trigger downwards block movement
 function moveBlockDown(player) {
   // Implement your block movement logic here
-  setGameState(player,gameReducer(getGameState(player),moveDown()));
+  setGameState(player, gameReducer(getGameState(player), moveDown()));
 }
+
 // Function to start the timer
-function startTimer(Id,io) {
+function startTimer(roomId,io) {
   if (!isRunning) {
-    timerInterval = setInterval(()=>{
-      moveBlockDown("player1");
-      moveBlockDown("player2");
-      const gameStatePayload = getGameStates();
-      io.in(Id).emit('gameState', gameStatePayload);
-      console.log("received")
-    }, BLOCK_MOVE_INTERVAL);
+    const timerFunction = () => {
+      if (isRunning) {
+        moveBlockDown("player1");
+        moveBlockDown("player2");
+        io.in(roomId).emit('gameState', getGameState("player1"),getGameState("player2"));
+        timerTimeout = setTimeout(timerFunction, BLOCK_MOVE_INTERVAL);
+      }
+    };
+
     isRunning = true;
+    timerFunction();
+    console.log("started")
   }
 }
 
 // Function to pause the timer
 function pauseTimer() {
-  if (isRunning) {
-    clearInterval(timerInterval);
-    isRunning = false;
-  }
+  console.log("paused")
+  clearTimeout(timerTimeout);
+  isRunning = false;
 }
+
+// Function to reset the timer
 function resetTimer() {
-    clearInterval(timerInterval);
-    isRunning = false;
+  clearTimeout(timerTimeout);
+  isRunning = false;
+}
+
+// Function to resume the timer
+function resumeTimer(roomId,io) {
+  isRunning = true;
+  startTimer(roomId,io);
 }
 
 module.exports = {
@@ -43,4 +54,5 @@ module.exports = {
   startTimer,
   pauseTimer,
   resetTimer,
+  resumeTimer
 };

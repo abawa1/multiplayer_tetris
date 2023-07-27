@@ -132,6 +132,7 @@ const generateRandomPiece=()=>{
 };
 const defaultGameState=()=>{
     return{
+        playerId:null,
         roomId:null,
         grid: defaultGrid(),
         piece: generateRandomPiece(),

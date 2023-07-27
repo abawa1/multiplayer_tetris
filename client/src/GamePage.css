@@ -310,3 +310,26 @@ body{
         box-shadow:0.5vh 0.5vh black;
     }
 }
+.wait-screen{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:100vw;
+    height:100vh;
+    transform:translate(-50%,-50%);
+    background-color: rgb(240,248,255);
+    text-align: center;
+    z-index:1
+}
+.wait-screen h2{
+    font-size:3vh;
+    top:100%;
+    left:0;
+    right:0;
+    transform:translateY(1000%);
+    text-align: center;
+}
+.wait-screen.hidden {
+    display: none;
+    z-index:0;
+}

@@ -4,14 +4,16 @@ import MultiScoreBoard from '../components/MultiScoreBoard.js'
 import {MultiButtons} from '../components/MultiScoreBoard.js'
 import MultiPopup from '../components/MultiPopup.js';
 import {MultiBoard} from '../components/MultiBoard'
-import Controls from '../components/Controls'
+import MultiControls from '../components/MultiControls'
+import WaitScreen from '../components/WaitScreen';
 import {reducer} from '../socket'
 import {Provider} from 'react-redux'
-export default function MultiGamePage(){
-    //Controls();
+export default function MultiGamePage({roomId}){
     return(
         <Provider store={reducer}>
+            <MultiControls></MultiControls>
         <div className="container">
+            
             <MultiPopup></MultiPopup>
             <MultiBoard player={"player1"}></MultiBoard>
             <div className="side-area-multi">
@@ -26,6 +28,7 @@ export default function MultiGamePage(){
                 <MultiScoreBoard player={"player2"}></MultiScoreBoard>
             </div>
             <MultiBoard player={"player2"}></MultiBoard>
+            <WaitScreen roomId={roomId}></WaitScreen>
         </div>
         </Provider>
     )
